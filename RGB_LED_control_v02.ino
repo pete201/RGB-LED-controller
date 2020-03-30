@@ -1,4 +1,7 @@
 /*
+ * v03 compile for 'D1 R2 and mimi', i am using D1 mini
+ * pins were 4,5,16 on 8266 12E module, now 2,4,5
+ * 
  * v02 (keep same name for now to reduce # folders
  * map serial input from 0-255 to 0-1023 since 8266 uses this as pwm range.
  * ______________________________________________
@@ -13,18 +16,16 @@
 */
 
 // pins for the LEDs:
-const int redPin = 4;
-const int greenPin = 5;
-const int bluePin = 16;
+const int redPin = 2;
+const int greenPin = 4;
+const int bluePin = 5;
 
 void setup() {
-  // initialize serial:
   Serial.begin(115200);
-  // make the pins outputs:
+
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
-
 }
 
 void loop() {
@@ -54,7 +55,7 @@ void loop() {
       analogWrite(greenPin, green);
       analogWrite(bluePin, blue);
 
-      // print the three numbers in one string as hexadecimal:
+      // DEBUG print the three numbers in one string as hexadecimal:
       Serial.print(red, HEX);
       Serial.print(green, HEX);
       Serial.println(blue, HEX);
