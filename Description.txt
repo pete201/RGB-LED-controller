@@ -1,0 +1,5 @@
+The grand idea is to have a Python GUI sending serial data to a:
+    Central Arduino Controller that sends RGB data via I2C to:
+    Individual Arduino controlled RGB LED lamps.
+
+
