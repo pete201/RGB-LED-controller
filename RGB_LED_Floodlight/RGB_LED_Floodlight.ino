@@ -1,16 +1,10 @@
 /*this version tries Software Serial to communicate between 8266 devices.
 Serial data format: DEVICE,R,G,B  (e.g. 2,200,200,100)
 
-
  * v04 is a branch from v03 for a Floodlight hack
  * Using D1 mini, and a commercially bought 12V LED Floodlight
- *  - remove 200mA limit
  *  - reverse polarity from LEDs since 0=ON
  * 
- * v03 compile for 'D1 R2 and mimi', i am using D1 mini
- * pins were 4,5,16 on 8266 12E module, now 2,4,5
- * 
- * v02 (keep same name for now to reduce # folders
  * map serial input from 0-255 to 0-1023 since 8266 uses this as pwm range.
 */
 
@@ -20,12 +14,12 @@ Serial data format: DEVICE,R,G,B  (e.g. 2,200,200,100)
 // note address 0 is all devices
 const int thisDevice = 2;
 // pins for the LEDs:
-const int redPin = 2;
-const int greenPin = 4;
-const int bluePin = 5;
+const int redPin = 13;
+const int greenPin = 12;
+const int bluePin = 14;
 // pins for software serial interface
-const int serialRxPin = 12;
-const int serialTxPin = 13;
+const int serialRxPin = 4;  // white wire
+const int serialTxPin = 5;  // blue wire
 
 int device;             // the device a serial message is addressed to
 int red = 0;            // initialise with LED off
