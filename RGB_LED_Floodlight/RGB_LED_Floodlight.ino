@@ -1,3 +1,5 @@
+#include <SoftwareSerial.h>
+
 /*this version tries Software Serial to communicate between 8266 devices.
 Serial data format: DEVICE,R,G,B  (e.g. 2,200,200,100)
 
@@ -8,7 +10,6 @@ Serial data format: DEVICE,R,G,B  (e.g. 2,200,200,100)
  * map serial input from 0-255 to 0-1023 since 8266 uses this as pwm range.
 */
 
-#include <SoftwareSerial.h>
 
 // this device address
 // note address 0 is all devices
@@ -27,18 +28,6 @@ int green = 0;
 int blue = 0;
 
 SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
-
-void setup() {
-  // hardware Serial is used for input (Master uses it to talk to PC)
-  Serial.begin(115200);
-
-  // Software serial is used for OUTPUT
-  mySerial.begin(115200);
-
-  pinMode(redPin, OUTPUT);
-  pinMode(greenPin, OUTPUT);
-  pinMode(bluePin, OUTPUT);
-}
 
 void writeRGB(int r, int g, int b)
 {
@@ -59,6 +48,21 @@ void writeRGB(int r, int g, int b)
   analogWrite(bluePin, b);
 }
 
+void setup() {
+  // hardware Serial is used for input (Master uses it to talk to PC)
+  Serial.begin(9600);
+
+  // Software serial is used for OUTPUT
+  mySerial.begin(9600);
+
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+
+  writeRGB(255,255,255);  // start with all LED's off
+}
+
+
 void loop() {
   // if there's any serial available, read it:
   while (Serial.available() > 0) {
@@ -77,10 +81,11 @@ void loop() {
 
       if (device != thisDevice){
         // send data to next device
-        mySerial.print(device); mySerial.print(",");
-        mySerial.print(red); mySerial.print(",");
-        mySerial.print(green); mySerial.print(",");
-        mySerial.println(blue);
+        mySerial.printf("%d,%d,%d,%d\n", device, red, green, blue);
+        // mySerial.print(device); mySerial.print(",");
+        // mySerial.print(red); mySerial.print(",");
+        // mySerial.print(green); mySerial.print(",");
+        // mySerial.println(blue);
       }
     }
   }
