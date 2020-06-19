@@ -1,17 +1,16 @@
-/*this version uses Software Serial to communicate between 8266 devices.
-Serial data format: DEVICE,R,G,B  (e.g. 2,200,200,100)
+/*this version uses Software Serial to communicate between 8266 targets and includes a HopCount
+Supervisor (communicates with PC) accepts: Target,R,G,B from PC, and adds HopCount for inter-target comms
+Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
 
  * Using D1 mini, and a commercially bought 12V LED Floodlight
- *  - reverse polarity from LEDs since 0=ON
  * 
  * map serial input from 0-255 to 0-1023 since 8266 uses this as pwm range.
 */
 
 #include <SoftwareSerial.h>
 
-// this device address
-// note address 0 is all devices
-const int thisDevice = 2;
+// DEVICE code (not supervisor)
+
 // pins for the LEDs:
 const int redPin = 13;
 const int greenPin = 12;
@@ -20,7 +19,9 @@ const int bluePin = 14;
 const int serialRxPin = 4;  // white wire
 const int serialTxPin = 5;  // blue wire
 
-int device;             // the device a serial message is addressed to
+// variables
+int hopCount;           // counts the number of times message is relayed
+int target;             // the device a serial message is addressed to
 int red;                // led's
 int green;
 int blue;
@@ -47,15 +48,19 @@ void writeRGB(int r, int g, int b)
 }
 
 void setup() {
-  // hardware Serial is used for input (Master uses it to talk to PC)
-  Serial.begin(115200);
+  // hardware Serial is used for firmware updates only (Supervisor uses it to talk to PC)
+  //Serial.begin(115200);
 
-  // Software serial is used for OUTPUT
-  mySerial.begin(115200);
+  // Software serial is used for I/O (use lower speed since cables could be a few feet long)
+  mySerial.begin(57600);
 
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
+
+  //debug
+  //pinMode(BUILTIN_LED, OUTPUT);
+  //digitalWrite (BUILTIN_LED, LOW);
 
   writeRGB(0,0,0);  // start with all LED's off
 }
@@ -63,22 +68,22 @@ void setup() {
 
 void loop() {
   // if there's any serial available, read it:
-  while (Serial.available() > 0) {
+  while (mySerial.available() > 0) {
 
     // look for valid integers in the incoming serial stream:
-    device = Serial.parseInt();
-    red = Serial.parseInt();
-    green = Serial.parseInt();
-    blue = Serial.parseInt();
-    // look for the newline:
-    if (Serial.read() == '\n'){
+    hopCount  = mySerial.parseInt();
+    target = mySerial.parseInt();
+    red = mySerial.parseInt();
+    green = mySerial.parseInt();
+    blue = mySerial.parseInt();
 
-      if (device != thisDevice){
-        // send data to next device
-        mySerial.printf("%d,%d,%d,%d\n", device, red, green, blue);
-      }
+    // look for the newline:
+    if (mySerial.read() == '\n'){
+
+      // send data to next target, increasing hopCount by 1
+      mySerial.printf("%d,%d,%d,%d,%d\n", hopCount+1,target, red, green, blue);
       
-      if (device == thisDevice || device == 0){
+      if (target == hopCount || target == 0){
         // set LEDs on this device
         writeRGB(red, green, blue);
       }
