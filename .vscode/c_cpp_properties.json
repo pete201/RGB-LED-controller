@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\pdeeming\\OneDrive - Varian Medical Systems\\Documents\\Arduino\\libraries\\EspSoftwareSerial\\src",
                 "C:\\Users\\pdeeming\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\**",
                 "C:\\Users\\pdeeming\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.4\\**",
                 "C:\\Users\\pdeeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
