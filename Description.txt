@@ -1,9 +1,0 @@
-The grand idea is to have a Python GUI sending serial data to a:
-    Central Arduino Controller that sends RGB data via I2C to:
-    Individual Arduino controlled RGB LED lamps.
-
-In Final without I2C, i have a lamp connected to 12V with D1mini inside.  
-TURN ON 12V BEFORE CONNECTING USB!!
-Control via Serial port on Arduino IDE.  0,0,0 is all off.  255,255,255 is all on
-
-

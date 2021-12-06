@@ -4,12 +4,11 @@
  * all it does is:
  *     echo serial data from PC to first device in daisy-chain
  *     adds a hopCount int infront of PC data:
+*       data in: Target,R,G,B
+ *      data out: HopCount,Target,R,G,B* 
  *     
  *     waits for response from last in daisy chain
  *     if data is corrupted then send again.
- * 
- * data in: Target,R,G,B
- * data out: HopCount,Target,R,G,B
  * 
  * Use Serial for comms with PC and SoftwareSerial for comms with next device
  * Main reason for this is that i can't physically fit a USB connector into my floodlights!
