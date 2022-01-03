@@ -1,3 +1,5 @@
+
+
 /*this version uses Software Serial to communicate between 8266 targets and includes a HopCount
 Supervisor (communicates with PC) accepts: Target,R,G,B from PC, and adds HopCount for inter-target comms
 Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
@@ -6,8 +8,8 @@ Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
  * 
  * map serial input from 0-255 to 0-1023 since 8266 uses this as pwm range.
 */
-
 #include <SoftwareSerial.h>
+//#include <dummy.h>
 
 // DEVICE code (not supervisor)
 
@@ -59,16 +61,18 @@ void setup() {
   pinMode(bluePin, OUTPUT);
 
   //debug
-  //pinMode(BUILTIN_LED, OUTPUT);
-  //digitalWrite (BUILTIN_LED, LOW);
+  pinMode(BUILTIN_LED, OUTPUT);
+  digitalWrite (BUILTIN_LED, HIGH);
 
-  writeRGB(0,0,0);  // start with all LED's off
+  writeRGB(100,0,100);  // start with all LED's off
 }
 
 
 void loop() {
   // if there's any serial available, read it:
   while (mySerial.available() > 0) {
+
+    digitalWrite (BUILTIN_LED, LOW);
 
     // look for valid integers in the incoming serial stream:
     hopCount  = mySerial.parseInt();
@@ -87,6 +91,9 @@ void loop() {
         // set LEDs on this device
         writeRGB(red, green, blue);
       }
+
+    digitalWrite (BUILTIN_LED, HIGH);
+      
     }
   }
 }

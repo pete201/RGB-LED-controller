@@ -6,7 +6,7 @@ import re
 import serial
 from random import randint
 
-ser = serial.Serial('COM5', 115200, timeout=0.1)
+ser = serial.Serial('COM3', 115200, timeout=0.1)
 
 root = tk.Tk()
 
@@ -56,8 +56,9 @@ while True:
             green = randint(0,255)
 
             ser.write(f"{light},{red},{green},{blue}\n".encode())
-            sleep(10)
+            
             print(red,green,blue)
+            sleep(10)
             print('')
     else:
         color = askcolor((255, 255, 255), root)

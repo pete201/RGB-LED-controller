@@ -8,7 +8,7 @@ import serial
 from random import randint
 
 try:
-    ser = serial.Serial('COM5', 115200, timeout=0.1)
+    ser = serial.Serial('COM3', 115200, timeout=0.1)
 except: 
     print ('No serial port detected')
     exit()
@@ -23,8 +23,6 @@ command = input('Please Choose: ')
 
 if command == 'exit':
     ser.close()
-    root.destroy()
-    root.mainloop()
     exit()
 
 elif command == 'random':
@@ -66,7 +64,8 @@ elif command == 'every10':
         
         print(red,green,blue)
         print('')
-        sleep(10)
+        #sleep(10)
+        sleep(3)
 
         loops = loops - 1
 elif command == 'picker':

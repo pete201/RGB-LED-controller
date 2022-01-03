@@ -21,39 +21,58 @@ const int serialRxPin = 4;  // white wire
 const int serialTxPin = 5;  // blue wire
 
 int hopCount = 1;
-int target;
-int red;
-int green;
-int blue;
+int target = 0;
+int red = 0;
+int green = 100;
+int blue = 200;
 
-SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
+//SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
 
 void setup() {
   Serial.begin(115200);
-  
+  Serial.print("started Serial");
   // Software serial is used for I/O
-  mySerial.begin(57600);
+  //mySerial.begin(57600);
+  //print("Started software serial")
 
   pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, 0);
 }
 
 void loop() {
-  //read data from PC. note that this seems to wait for serial timeout; theres a delay before exiting while loop
+  //read data from PC
   while (Serial.available() > 0) {
+
     digitalWrite(LED_BUILTIN, 0);   // turn ON built in LED
 
     target = Serial.parseInt();
     red = Serial.parseInt();
     green = Serial.parseInt();
     blue = Serial.parseInt();
-    Serial.readString();             // flush any remaining characters until the newline:
-
-    digitalWrite(LED_BUILTIN, 1);   // turn OFF built in LED
+    Serial.readString()             // flush any remaining characters until the newline:
+    }
   }
 
-  mySerial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+  red++;
+  if (red > 255){
+    red=0;
+  }
+  green++;
+  if (green>255){
+    green=0;
+  }
+  blue++;
+  if (blue>255){
+    blue=0;
+  }
 
-  digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-  delay(200);    // this delay is to give LEDs a chance to read and process messages
+  //mySerial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+  
 
+  digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));   // toggle built in LED
+
+  delay(100);    // this delay is to give LEDs a chance to read and process messages
+
+  Serial.println("looping")
 }
+
