@@ -16,8 +16,8 @@
 
 #include <SoftwareSerial.h>
 // pins for software serial interface
-const int serialRxPin = 4;  // white wire
-const int serialTxPin = 5;  // blue wire
+const int serialRxPin = 4;  // (D2) blue wire
+const int serialTxPin = 5;  // (D1) white wire
 
 int hopCount = 1;
 int target;

@@ -16,8 +16,8 @@ const int redPin = 13;
 const int greenPin = 12;
 const int bluePin = 14;
 // pins for software serial interface
-const int serialRxPin = 4;  // white wire
-const int serialTxPin = 5;  // blue wire
+const int serialRxPin = 4;  // (D2) white wire
+const int serialTxPin = 5;  // (D1) blue wire
 
 // variables
 int hopCount;           // counts the number of times message is relayed

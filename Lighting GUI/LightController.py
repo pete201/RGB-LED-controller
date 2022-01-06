@@ -6,7 +6,7 @@ import re
 import serial
 from random import randint
 
-ser = serial.Serial('COM7', 115200, timeout=0.1)
+ser = serial.Serial('COM3', 115200, timeout=0.1)
 
 root = tk.Tk()
 
