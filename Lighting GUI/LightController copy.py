@@ -1,4 +1,5 @@
 from time import sleep
+import json
 import tkinter as tk
 import tkinter.ttk as ttk
 from typing import Match
@@ -7,19 +8,24 @@ import re
 import serial
 from random import randint
 
+# get serial port from arduino.json file
+MyFile = open('.vscode/arduino.json')
+MyData = json.load(MyFile)
+MyPort = MyData['port']
+MyFile.close()
+
+# open serial port to arduino
 try:
-    ser = serial.Serial('COM3', 115200, timeout=0.1)
+    ser = serial.Serial(port=MyPort, baudrate=115200, timeout=.1)
 except: 
     print ('No serial port detected')
     exit()
+ser.reset_input_buffer
 
-
-
-# set all lights off to begin
-ser.write(f"0,0,0,0\n".encode())
 
 print('Choose either: exit, scene, every10, random or picker')
-command = input('Please Choose: ')
+#command = input('Please Choose: ')
+command = 'random'
 
 if command == 'exit':
     ser.close()
@@ -28,13 +34,21 @@ if command == 'exit':
 elif command == 'random':
     light = input('Select a light: ')
     red = randint(0,255)
-    blue = randint(0,255)
     green = randint(0,255)
+    blue = randint(0,255)    
 
     ser.write(f"{light},{red},{green},{blue}\n".encode())
     
-    print(red,green,blue)
-    print('')
+    print("Output values: ",red,green,blue)
+
+    sleep(0.5) # necessary to wait for arduino to respond
+
+    if ser.in_waiting > 0:
+        data = str(ser.readline())
+        print("data received: ", data)
+    else:
+        print("No serial data")
+
 
 elif command == 'scene':
     scene = input('Choose which scene: ')
