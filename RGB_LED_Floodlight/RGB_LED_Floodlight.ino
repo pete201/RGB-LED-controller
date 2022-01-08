@@ -15,6 +15,11 @@ Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
 #include "message_class.h"
 
 
+/***********************************************************************************************************************************
+// TODO - uncomment the mySerial print lines to send data to next floodlight.  commented out as it causes hang if port not connected
+***********************************************************************************************************************************/
+
+
 // pins for software serial interface
 const int serialRxPin = 4;  // white wire
 const int serialTxPin = 5;  // blue wire
