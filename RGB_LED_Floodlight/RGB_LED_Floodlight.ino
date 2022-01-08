@@ -47,7 +47,7 @@ message::message(int red, int green, int blue){
 
 void message::buildMessage(int data) {
   // on incoming serial, add next data item to array and increase counter (arrayIndex)
-  Serial.println("adding data item to array...");
+  Serial.printf("buildMessage: adding data %d to array position %d\n", data, arrayIndex);
   messageArray[arrayIndex] = data;
   arrayIndex++;
 }
@@ -58,9 +58,12 @@ void message::endMessage() {
     if (messageArray[target] == messageArray[hopCount] || messageArray[target] == 0){
           // set LEDs on this device
           writeRGB(messageArray[red],messageArray[green],messageArray[blue]);
-        }
+          Serial.printf("endMessage: %d,%d,%d,%d,%d\n", messageArray[hopCount], messageArray[target], messageArray[red], messageArray[green], messageArray[blue]);
+    } else {
+      Serial.println("endMessage: message not for this LED");
+    }
   } else {
-    Serial.print("incorrect buffer size: ");       // if wrong array size then do nothing
+    Serial.print("endMessage: incorrect buffer size: ");       // if wrong array size then do nothing
     Serial.println(arrayIndex);
   }
   // regardless of correct number of elements, reset counter for next message
@@ -126,33 +129,39 @@ void loop() {
 
     // read one char from serial:
     char in = Serial.read();
-    Serial.print("got serial...");
+    Serial.print("loop: got serial: ");
     Serial.println(in);
 
     if (in == 'H'){     //special case; marks beginning of message
-      Serial.println("begin start sequence. found H: ");
+      Serial.println("loop: begin start sequence. found H: ");
       int hop = Serial.parseInt();   // use parseint so that we read any number of digits
       Serial.println(hop);
       // tell rgbMessage we have a start signal (resets counter)
       rgbMessage.resetCounter();
+      
       // tell rgbMessage to store hopCount
-      rgbMessage.buildMessage(hop);
+      //rgbMessage.buildMessage(hop);
+
+      // set messagePart to current hop - will be added to message on recipt of ","
+      messagePart = hop;
 
       hop++;
-      Serial.print("Next hop is: ");
+      Serial.print("loop: Next hop is: ");
       Serial.println(hop);          
-      //mySerial.print(hop); mySerial.print(",");   // pass increased hopCount to next LED floodlight
+      //mySerial.print(hop);    // pass increased hopCount to next LED floodlight
 
     } else if (in == '\n'){                         // look for newline character
         // tell rgbMessage to store incoming data
         rgbMessage.buildMessage(messagePart);
+        messagePart = 0;
         // tell rgbMessage the we reached message end
         rgbMessage.endMessage();  
     } else if (in == ','){                          // look for value delimiter ","
         // tell rgbMessage to store incoming data
         rgbMessage.buildMessage(messagePart);
+        messagePart = 0;
     } else {                                        // we have an incoming digit
-      messagePart = messagePart * 10 + in;
+      messagePart = (messagePart * 10) + (in - 48); // convert ASCII char to integer ("1" = char 49)
     }
        
     digitalWrite (BUILTIN_LED, HIGH);
