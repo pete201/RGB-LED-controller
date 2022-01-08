@@ -28,10 +28,6 @@ int red;                // led's
 int green;
 int blue;
 
-int input[16];           // input buffer to store incoming serial data.  Only need 5 bytes, but extra is incase we miss some newlines.
-int arrayPointer = 0;    // used to index our array
-
-
 SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
 
 void writeRGB(int r, int g, int b)
@@ -53,22 +49,9 @@ void writeRGB(int r, int g, int b)
   analogWrite(bluePin, b);
 }
 
-void buildMessage()
-{
-  // build message from the incoming serial if we have 5 bytes
-
-  Serial.println("building message...");
-
-  hopCount  = input[0];
-  target = input[1];
-  red = input[2];
-  green = input[3];
-  blue = input[4];
-}
-
 void setup() {
   // hardware Serial is used for firmware updates only (Supervisor uses it to talk to PC)
-  Serial.begin(115200);
+  //Serial.begin(115200);
 
   // Software serial is used for I/O (use lower speed since cables could be a few feet long)
   mySerial.begin(57600);
@@ -86,53 +69,31 @@ void setup() {
 
 
 void loop() {
-  // Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
   // if there's any serial available, read it:
-  if (Serial.available()) {
+  while (mySerial.available() > 0) {
+
     digitalWrite (BUILTIN_LED, LOW);
 
-    // read one char from serial:
-    char in = Serial.read();
-    Serial.print("got serial...");
-    Serial.println(in);
+    // look for valid integers in the incoming serial stream:
+    hopCount  = mySerial.parseInt();
+    target = mySerial.parseInt();
+    red = mySerial.parseInt();
+    green = mySerial.parseInt();
+    blue = mySerial.parseInt();
 
-    if (in == 'H'){     //special case; marks beginning of message
-      Serial.println("begin start sequence. found H: ");
-      hopCount = Serial.parseInt();   // use parseint so that we read any number of digits
-      Serial.println(hopCount);
-      // store hopCount
+    // look for the newline:
+    if (mySerial.read() == '\n'){
 
-      hopCount++;
-      Serial.print("Next hop is: ");
-      Serial.println(hopCount);
-
-    }
-
-    //TODO read CHAR until ',', then i have an INT. etc etc
-
-    // look for newline character
-    if (in != '\n'){
-      input[arrayPointer] = in;
-      arrayPointer++;
-    } else {
-      if (arrayPointer == 4){
-        buildMessage();
-
-        if (target == hopCount || target == 0){
-          // set LEDs on this device
-          writeRGB(red, green, blue);
-        }
-        
-        // send data to next target, increasing hopCount by 1
-        hopCount++;
-        mySerial.printf("%d,%d,%d,%d,%d\n", hopCount,target, red, green, blue);
-      } else {
-        Serial.print("incorrect buffer size: ");       // if wrong array size then do nothing
-        Serial.println(arrayPointer);
+      // send data to next target, increasing hopCount by 1
+      mySerial.printf("%d,%d,%d,%d,%d\n", hopCount+1,target, red, green, blue);
+      
+      if (target == hopCount || target == 0){
+        // set LEDs on this device
+        writeRGB(red, green, blue);
       }
-      arrayPointer = 0;  
-      digitalWrite (BUILTIN_LED, HIGH);
+
+    digitalWrite (BUILTIN_LED, HIGH);
+   
     }
   }
 }
-      
