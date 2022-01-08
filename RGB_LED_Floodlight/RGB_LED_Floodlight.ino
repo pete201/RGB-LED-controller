@@ -138,9 +138,6 @@ void loop() {
       Serial.println(hop);
       // tell rgbMessage we have a start signal (resets counter)
       rgbMessage.resetCounter();
-      
-      // tell rgbMessage to store hopCount
-      //rgbMessage.buildMessage(hop);
 
       // set messagePart to current hop - will be added to message on recipt of ","
       messagePart = hop;
@@ -148,27 +145,26 @@ void loop() {
       hop++;
       Serial.print("loop: Next hop is: ");
       Serial.println(hop);          
-      //mySerial.print(hop);    // pass increased hopCount to next LED floodlight
+      //mySerial.printf("H%d",hop);    // pass increased hopCount to next LED floodlight
 
-    } else if (in == '\n'){                         // look for newline character
+    } else {
+      // in all other cases but "H", echo to mySerial
+      //mySerial.printf(in);    // pass increased hopCount to next LED floodlight
+      if (in == '\n'){                         // look for newline character
         // tell rgbMessage to store incoming data
         rgbMessage.buildMessage(messagePart);
         messagePart = 0;
         // tell rgbMessage the we reached message end
         rgbMessage.endMessage();  
-    } else if (in == ','){                          // look for value delimiter ","
-        // tell rgbMessage to store incoming data
-        rgbMessage.buildMessage(messagePart);
-        messagePart = 0;
-    } else {                                        // we have an incoming digit
-      messagePart = (messagePart * 10) + (in - 48); // convert ASCII char to integer ("1" = char 49)
-    }
-       
+      } else if (in == ','){                          // look for value delimiter ","
+          // tell rgbMessage to store incoming data
+          rgbMessage.buildMessage(messagePart);
+          messagePart = 0;
+      } else {                                        // we have an incoming digit
+        messagePart = (messagePart * 10) + (in - 48); // convert ASCII char to integer ("1" = char 49)
+      }
+    }  
     digitalWrite (BUILTIN_LED, HIGH);
-
-// send data to next target, increasing hopCount by 1
-//mySerial.printf("%d,%d,%d,%d,%d\n", hopCount,target, red, green, blue);
-
   }
 }
       
