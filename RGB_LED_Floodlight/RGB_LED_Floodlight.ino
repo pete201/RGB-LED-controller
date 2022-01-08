@@ -8,34 +8,67 @@ Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
  * 
  * map serial input from 0-255 to 0-1023 since 8266 uses this as pwm range.
 */
-#include <SoftwareSerial.h>
-//#include <dummy.h>
 
 // DEVICE code (not supervisor)
 
-// pins for the LEDs:
-const int redPin = 13;
-const int greenPin = 12;
-const int bluePin = 14;
-// pins for software serial interface
-const int serialRxPin = 4;  // white wire
-const int serialTxPin = 5;  // blue wire
+#include <SoftwareSerial.h>
 
-// variables
-int hopCount;           // counts the number of times message is relayed
-int target;             // the device a serial message is addressed to
-int red;                // led's
-int green;
-int blue;
+class message {
+  public:
+    message (int, int, int);
+    void resetCounter() {arrayIndex = 0;}
+    void buildMessage(int);
+    void endMessage();
+    void writeRGB(int, int, int);
+  private:
+    int redPin;
+    int greenPin;
+    int bluePin;
+    const int hopCount = 0;           // counts the number of times message is relayed
+    const int target = 1;             // the device a serial message is addressed to
+    const int red = 2;                // led's
+    const int green = 3;
+    const int blue = 4;
+    int nextData;
+    int messageArray [16];            // array used to build message piece by piece
+    int arrayIndex = 0;
 
-int input[16];           // input buffer to store incoming serial data.  Only need 5 bytes, but extra is incase we miss some newlines.
-int arrayPointer = 0;    // used to index our array
+};
 
+message::message(int red, int green, int blue){
+  // constructor for message
+  redPin = red;
+  greenPin = green;
+  bluePin = blue;
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+}
 
-SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
+void message::buildMessage(int data) {
+  // on incoming serial, add next data item to array and increase counter (arrayIndex)
+  Serial.println("adding data item to array...");
+  messageArray[arrayIndex] = data;
+  arrayIndex++;
+}
 
-void writeRGB(int r, int g, int b)
-{
+void message::endMessage() {
+  // if we have correct number of data elements, set LEDs
+  if (arrayIndex == 5){
+    if (messageArray[target] == messageArray[hopCount] || messageArray[target] == 0){
+          // set LEDs on this device
+          writeRGB(messageArray[red],messageArray[green],messageArray[blue]);
+        }
+  } else {
+    Serial.print("incorrect buffer size: ");       // if wrong array size then do nothing
+    Serial.println(arrayIndex);
+  }
+  // regardless of correct number of elements, reset counter for next message
+  arrayIndex = 0;
+}
+
+void message::writeRGB(int r, int g, int b) {
+  // function for setting LEDs
   // constrain the values to 0 - 255
   r = constrain(r, 0, 255);
   g = constrain(g, 0, 255);
@@ -53,18 +86,22 @@ void writeRGB(int r, int g, int b)
   analogWrite(bluePin, b);
 }
 
-void buildMessage()
-{
-  // build message from the incoming serial if we have 5 bytes
 
-  Serial.println("building message...");
 
-  hopCount  = input[0];
-  target = input[1];
-  red = input[2];
-  green = input[3];
-  blue = input[4];
-}
+// pins for software serial interface
+const int serialRxPin = 4;  // white wire
+const int serialTxPin = 5;  // blue wire
+// variable for builiding up incoming integer char by char
+int messagePart = 0;
+
+
+
+
+// create an instance of the message class to handle rgb messages: (redPin, greenPin, bluePin)
+message rgbMessage (13,12,14);
+// create serial interface for interconnecting 8266s (leaves Serial available for uploading and debugging)
+SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
+
 
 void setup() {
   // hardware Serial is used for firmware updates only (Supervisor uses it to talk to PC)
@@ -73,20 +110,16 @@ void setup() {
   // Software serial is used for I/O (use lower speed since cables could be a few feet long)
   mySerial.begin(57600);
 
-  pinMode(redPin, OUTPUT);
-  pinMode(greenPin, OUTPUT);
-  pinMode(bluePin, OUTPUT);
-
   //debug
   pinMode(BUILTIN_LED, OUTPUT);
   digitalWrite (BUILTIN_LED, HIGH);
 
-  writeRGB(0,0,0);  // start with all LED's off
+  rgbMessage.writeRGB(0,0,0);  // start with all LED's off
 }
 
 
 void loop() {
-  // Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
+  // Serial data format: HopCount,Target,R,G,B  (e.g. H1,2,200,200,100)
   // if there's any serial available, read it:
   if (Serial.available()) {
     digitalWrite (BUILTIN_LED, LOW);
@@ -98,41 +131,35 @@ void loop() {
 
     if (in == 'H'){     //special case; marks beginning of message
       Serial.println("begin start sequence. found H: ");
-      hopCount = Serial.parseInt();   // use parseint so that we read any number of digits
-      Serial.println(hopCount);
-      // store hopCount
+      int hop = Serial.parseInt();   // use parseint so that we read any number of digits
+      Serial.println(hop);
+      // tell rgbMessage we have a start signal (resets counter)
+      rgbMessage.resetCounter();
+      // tell rgbMessage to store hopCount
+      rgbMessage.buildMessage(hop);
 
-      hopCount++;
+      hop++;
       Serial.print("Next hop is: ");
-      Serial.println(hopCount);
+      Serial.println(hop);          
+      //mySerial.print(hop); mySerial.print(",");   // pass increased hopCount to next LED floodlight
 
+    } else if (in == '\n'){                         // look for newline character
+        // tell rgbMessage to store incoming data
+        rgbMessage.buildMessage(messagePart);
+        // tell rgbMessage the we reached message end
+        rgbMessage.endMessage();  
+    } else if (in == ','){                          // look for value delimiter ","
+        // tell rgbMessage to store incoming data
+        rgbMessage.buildMessage(messagePart);
+    } else {                                        // we have an incoming digit
+      messagePart = messagePart * 10 + in;
     }
+       
+    digitalWrite (BUILTIN_LED, HIGH);
 
-    //TODO read CHAR until ',', then i have an INT. etc etc
+// send data to next target, increasing hopCount by 1
+//mySerial.printf("%d,%d,%d,%d,%d\n", hopCount,target, red, green, blue);
 
-    // look for newline character
-    if (in != '\n'){
-      input[arrayPointer] = in;
-      arrayPointer++;
-    } else {
-      if (arrayPointer == 4){
-        buildMessage();
-
-        if (target == hopCount || target == 0){
-          // set LEDs on this device
-          writeRGB(red, green, blue);
-        }
-        
-        // send data to next target, increasing hopCount by 1
-        hopCount++;
-        mySerial.printf("%d,%d,%d,%d,%d\n", hopCount,target, red, green, blue);
-      } else {
-        Serial.print("incorrect buffer size: ");       // if wrong array size then do nothing
-        Serial.println(arrayPointer);
-      }
-      arrayPointer = 0;  
-      digitalWrite (BUILTIN_LED, HIGH);
-    }
   }
 }
       
