@@ -74,11 +74,9 @@ void loop() {
       // in all other cases but "H", echo to mySerial
       //mySerial.printf(in);    // pass increased hopCount to next LED floodlight
       if (in == '\n'){                         // look for newline character
-        // tell rgbMessage to store incoming data
-        rgbMessage.buildMessage(messagePart);
-        messagePart = 0;
         // tell rgbMessage the we reached message end
-        rgbMessage.endMessage();  
+        rgbMessage.endMessage(messagePart); 
+        messagePart = 0;  
       } else if (in == ','){                          // look for value delimiter ","
           // tell rgbMessage to store incoming data
           rgbMessage.buildMessage(messagePart);

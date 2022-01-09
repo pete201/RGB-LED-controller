@@ -20,7 +20,9 @@ void message::buildMessage(int data) {
   arrayIndex++;
 }
 
-void message::endMessage() {
+void message::endMessage(int data) {
+  // first call buildMessage to add last data element to array
+  buildMessage(data);
   // if we have correct number of data elements, set LEDs
   if (arrayIndex == 5){
     if (messageArray[target] == messageArray[hopCount] || messageArray[target] == 0){

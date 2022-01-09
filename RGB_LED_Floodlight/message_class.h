@@ -8,7 +8,7 @@ class message {
     message (int, int, int);
     void resetCounter() {arrayIndex = 0;}
     void buildMessage(int);
-    void endMessage();
+    void endMessage(int);
     void writeRGB(int, int, int);
   private:
     int redPin;
