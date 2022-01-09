@@ -28,7 +28,7 @@ void message::endMessage(int data) {
     if (messageArray[target] == messageArray[hopCount] || messageArray[target] == 0){
           // set LEDs on this device
           writeRGB(messageArray[red],messageArray[green],messageArray[blue]);
-          Serial.printf("endMessage: %d,%d,%d,%d,%d\n", messageArray[hopCount], messageArray[target], messageArray[red], messageArray[green], messageArray[blue]);
+          Serial.printf("endMessage: %d,%d,%d,%d,%d\n\n", messageArray[hopCount], messageArray[target], messageArray[red], messageArray[green], messageArray[blue]);
     } else {
       Serial.println("endMessage: message not for this LED");
     }

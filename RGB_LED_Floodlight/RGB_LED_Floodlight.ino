@@ -68,11 +68,24 @@ void loop() {
       hop++;
       Serial.print("loop: Next hop is: ");
       Serial.println(hop);          
-      //mySerial.printf("H%d",hop);    // pass increased hopCount to next LED floodlight
+
+      // pass increased hopCount to next LED floodlight if softwareSerial is OK
+      if (mySerial.available()){
+        mySerial.printf("H%d",hop);    
+      } else {
+        Serial.print("mySerial.available = ");
+        Serial.println(mySerial.available());
+      }
 
     } else {
-      // in all other cases but "H", echo to mySerial
-      //mySerial.printf(in);    // pass increased hopCount to next LED floodlight
+      // in all other cases but "H", echo to mySerial if softwareSerial is OK
+      if (mySerial.available()){
+        mySerial.print(in);    
+      } else {
+        Serial.print("mySerial.available = ");
+        Serial.println(mySerial.available());
+      }
+      
       if (in == '\n'){                         // look for newline character
         // tell rgbMessage the we reached message end
         rgbMessage.endMessage(messagePart); 
