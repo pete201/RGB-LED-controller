@@ -45,7 +45,7 @@ void loop() {
     // look for the newline:
     if (Serial.read() == '\n'){
       // send data to next target, adding hopCount = 1
-      mySerial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+      mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
 //      // send data back to PC 
 //      Serial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
     } else {
@@ -65,7 +65,7 @@ void loop() {
 
     // look for the newline and send back to PC
     if (mySerial.read() == '\n'){
-      Serial.printf("%d,%d,%d,%d,%d\n", rrhopCount, rrtarget, rrred, rrgreen, rrblue);
+      Serial.printf("H%d,%d,%d,%d,%d\n", rrhopCount, rrtarget, rrred, rrgreen, rrblue);
     } else {
       Serial.println("No round robin");
     }
