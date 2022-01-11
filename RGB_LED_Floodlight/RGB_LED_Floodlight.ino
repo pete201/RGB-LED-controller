@@ -38,8 +38,8 @@ void setup() {
   // Software serial is used for I/O (use lower speed since cables could be a few feet long)
   mySerial.begin(57600);
 
-  pinMode(BUILTIN_LED, OUTPUT);
-  digitalWrite (BUILTIN_LED, HIGH);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite (LED_BUILTIN, HIGH);
 
   rgbMessage.writeRGB(0,0,0);  // start with all LED's off
 }
@@ -48,17 +48,17 @@ void setup() {
 void loop() {
   // Serial data format: HopCount,Target,R,G,B  (e.g. H1,2,200,200,100)
   // if there's any serial available, read it:
-  if (Serial.available()) {
-    digitalWrite (BUILTIN_LED, LOW);
+  if (mySerial.available()) {
+    digitalWrite (LED_BUILTIN, LOW);
 
     // read one char from serial:
-    char in = Serial.read();
+    char in = mySerial.read();
     Serial.print("loop: got serial: ");
     Serial.println(in);
 
     if (in == 'H'){                   //special case; marks beginning of message
+      int hop = mySerial.parseInt();    // use parseint so that we read any number of digits
       Serial.println("loop: begin start sequence. found H: ");
-      int hop = Serial.parseInt();    // use parseint so that we read any number of digits
       Serial.println(hop);
       // tell rgbMessage we have a start signal (resets counter)
       rgbMessage.resetCounter();
@@ -70,20 +70,22 @@ void loop() {
       Serial.println(hop);          
 
       // pass increased hopCount to next LED floodlight if softwareSerial is OK
-      if (mySerial.available()){
-        mySerial.printf("H%d",hop);    
+      if (mySerial){
+        mySerial.printf("H%d",hop);
+        Serial.printf("mySerial sent: H%d",hop);  
       } else {
-        Serial.print("mySerial.available = ");
-        Serial.println(mySerial.available());
+        Serial.print("loop: port not ready, mySerial = ");
+        Serial.println(mySerial);
       }
 
     } else {
       // in all other cases but "H", echo to mySerial if softwareSerial is OK
-      if (mySerial.available()){
-        mySerial.print(in);    
+      if (mySerial){
+        mySerial.print(in);
+        Serial.printf("mySerial sent: %d",in);    
       } else {
-        Serial.print("mySerial.available = ");
-        Serial.println(mySerial.available());
+        Serial.print("loop: port not ready, mySerial = ");
+        Serial.println(mySerial);
       }
       
       if (in == '\n'){                         // look for newline character
@@ -98,7 +100,6 @@ void loop() {
         messagePart = (messagePart * 10) + (in - 48); // convert ASCII char to integer ("1" = char 49)
       }
     }  
-    digitalWrite (BUILTIN_LED, HIGH);
+    digitalWrite (LED_BUILTIN, HIGH);
   }
 }
-      

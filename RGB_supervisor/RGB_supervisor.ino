@@ -33,41 +33,49 @@ void setup() {
   // Software serial is used for I/O
   mySerial.begin(57600);
 
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite (LED_BUILTIN, HIGH);
 }
 
 void loop() {
   //read data from PC
   while (Serial.available() > 0) {
+    digitalWrite (LED_BUILTIN, LOW);
+    Serial.print("receiving data...");
+
     target = Serial.parseInt();
     red = Serial.parseInt();
     green = Serial.parseInt();
     blue = Serial.parseInt();
+
+    Serial.print(Serial.available());
     // look for the newline:
-    if (Serial.read() == '\n'){
+    //if (Serial.read() == '\n'){
       // send data to next target, adding hopCount = 1
-      mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+    mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
 //      // send data back to PC 
-//      Serial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
-    } else {
-      Serial.println("data error");
-    }
+    Serial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+    // } else {
+    //   Serial.println("data error");
+    // }
+    digitalWrite (LED_BUILTIN, HIGH);
   }
 
   // when message circles round floodlights and gets back to supervisor, echo back to PC
-  while (mySerial.available() > 0) {
+  // while (mySerial.available() > 0) {
 
-    // look for valid integers in the incoming serial stream; identified as 'round robin' ints
-    int rrhopCount  = mySerial.parseInt();
-    int rrtarget = mySerial.parseInt();
-    int rrred = mySerial.parseInt();
-    int rrgreen = mySerial.parseInt();
-    int rrblue = mySerial.parseInt();
+  //   // look for valid integers in the incoming serial stream; identified as 'round robin' ints
+  //   int rrhopCount  = mySerial.parseInt();
+  //   int rrtarget = mySerial.parseInt();
+  //   int rrred = mySerial.parseInt();
+  //   int rrgreen = mySerial.parseInt();
+  //   int rrblue = mySerial.parseInt();
 
-    // look for the newline and send back to PC
-    if (mySerial.read() == '\n'){
-      Serial.printf("H%d,%d,%d,%d,%d\n", rrhopCount, rrtarget, rrred, rrgreen, rrblue);
-    } else {
-      Serial.println("No round robin");
-    }
-  }
+  //   // look for the newline and send back to PC
+  //   if (mySerial.read() == '\n'){
+  //     Serial.printf("H%d,%d,%d,%d,%d\n", rrhopCount, rrtarget, rrred, rrgreen, rrblue);
+  //   } else {
+  //     Serial.println("No round robin");
+  //   }
+  // }
 }
