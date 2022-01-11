@@ -46,59 +46,37 @@ void setup() {
 
 
 void loop() {
-  // Serial data format: HopCount,Target,R,G,B  (e.g. H1,2,200,200,100)
+  // Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
   // if there's any serial available, read it:
-  if (mySerial.available()) {
+  if (Serial.available()) {
     digitalWrite (LED_BUILTIN, LOW);
 
-    // read one char from serial:
-    char in = mySerial.read();
-    Serial.print("loop: got serial: ");
-    Serial.println(in);
+    int readInt = Serial.parseInt();    // use parseint so that we read any number of digits
+    char delimiter = Serial.read();     // catch character following int value
+    Serial.print("loop: got readInt: ");
+    Serial.println(readInt);
+    Serial.print("loop: got delimiter: ");
+    Serial.println(delimiter);
+    if (readInt > 999){
+      readInt++;        // hopcount starts at 1000, so if hopcount then increment
+    }
 
-    if (in == 'H'){                   //special case; marks beginning of message
-      int hop = mySerial.parseInt();    // use parseint so that we read any number of digits
-      Serial.println("loop: begin start sequence. found H: ");
-      Serial.println(hop);
-      // tell rgbMessage we have a start signal (resets counter)
-      rgbMessage.resetCounter();
-
-      // set messagePart to current hop - will be added to message on recipt of ","
-      messagePart = hop;
-      hop++;
-      Serial.print("loop: Next hop is: ");
-      Serial.println(hop);          
-
-      // pass increased hopCount to next LED floodlight if softwareSerial is OK
-      if (mySerial){
-        mySerial.printf("H%d",hop);
-        Serial.printf("mySerial sent: H%d",hop);  
-      } else {
-        Serial.print("loop: port not ready, mySerial = ");
-        Serial.println(mySerial);
-      }
-
+    if (mySerial){
+      mySerial.printf("mySerial sent: %d%c",readInt,delimiter);
+      Serial.printf("mySerial sent: %d%c\n",readInt,delimiter);    
     } else {
-      // in all other cases but "H", echo to mySerial if softwareSerial is OK
-      if (mySerial){
-        mySerial.print(in);
-        Serial.printf("mySerial sent: %d",in);    
-      } else {
-        Serial.print("loop: port not ready, mySerial = ");
-        Serial.println(mySerial);
-      }
-      
-      if (in == '\n'){                         // look for newline character
-        // tell rgbMessage the we reached message end
-        rgbMessage.endMessage(messagePart); 
-        messagePart = 0;  
-      } else if (in == ','){                          // look for value delimiter ","
-          // tell rgbMessage to store incoming data
-          rgbMessage.buildMessage(messagePart);
-          messagePart = 0;
-      } else {                                        // we have an incoming digit
-        messagePart = (messagePart * 10) + (in - 48); // convert ASCII char to integer ("1" = char 49)
-      }
+      Serial.print("loop: port not ready, mySerial = ");
+      Serial.println(mySerial);
+    }
+    
+    if (delimiter == '\n'){                         // look for newline character
+      // tell rgbMessage the we reached message end
+      rgbMessage.endMessage(readInt); 
+      messagePart = 0;  
+    } else if (delimiter == ','){                          // look for value delimiter ","
+        // tell rgbMessage to store incoming data
+        rgbMessage.buildMessage(readInt);
+        messagePart = 0;
     }  
     digitalWrite (LED_BUILTIN, HIGH);
   }

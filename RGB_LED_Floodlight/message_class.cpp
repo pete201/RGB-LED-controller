@@ -25,7 +25,7 @@ void message::endMessage(int data) {
   buildMessage(data);
   // if we have correct number of data elements, set LEDs
   if (arrayIndex == 5){
-    if (messageArray[target] == messageArray[hopCount] || messageArray[target] == 0){
+    if (messageArray[target] == messageArray[hopCount]-1001 || messageArray[target] == 0){
           // set LEDs on this device
           writeRGB(messageArray[red],messageArray[green],messageArray[blue]);
           Serial.printf("endMessage: %d,%d,%d,%d,%d\n\n", messageArray[hopCount], messageArray[target], messageArray[red], messageArray[green], messageArray[blue]);
