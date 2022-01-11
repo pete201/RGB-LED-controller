@@ -15,9 +15,8 @@ Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
 #include "message_class.h"
 
 
-/***********************************************************************************************************************************
-// TODO - uncomment the mySerial print lines to send data to next floodlight.  commented out as it causes hang if port not connected
-***********************************************************************************************************************************/
+
+
 
 
 // pins for software serial interface
@@ -31,45 +30,49 @@ message rgbMessage (13,12,14);
 // create serial interface for interconnecting 8266s (leaves Serial available for uploading and debugging)
 SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
 
+// create A pointer to Serial/mySerial to make it easier to switch for debugging
+/********************************************************************************************
+SELECT ONE OR OTHER SERIAL PORT TO RECEIVE INPUT DATA: SERIAL FOR DEBUGGING; MYSERIAL FOR USE
+*********************************************************************************************/
+SoftwareSerial &activeSerial = mySerial;
+//HardwareSerial &activeSerial = Serial;
+
 
 void setup() {
-  // hardware Serial is used for firmware updates only (Supervisor uses it to talk to PC)
-  Serial.begin(115200);
-  // Software serial is used for I/O (use lower speed since cables could be a few feet long)
-  mySerial.begin(57600);
+  Serial.begin(115200);               // hardware Serial is used for firmware updates and debugging
+  mySerial.begin(57600);              // Software serial is used for I/O (use lower speed since cables could be a few feet long)
 
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);       // LED provides a visual que that data is being processed
   digitalWrite (LED_BUILTIN, HIGH);
 
-  rgbMessage.writeRGB(0,0,0);  // start with all LED's off
+  rgbMessage.writeRGB(0,0,0);         // start with all LED's off
 }
 
 
 void loop() {
   // Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
   // if there's any serial available, read it:
-  if (Serial.available()) {
-    digitalWrite (LED_BUILTIN, LOW);
+  if (activeSerial.available()) {
+    digitalWrite (LED_BUILTIN, LOW);    // LED provides a visual que that data is being processed
 
-    int readInt = Serial.parseInt();    // use parseint so that we read any number of digits
-    char delimiter = Serial.read();     // catch character following int value
-    Serial.print("loop: got readInt: ");
-    Serial.println(readInt);
-    Serial.print("loop: got delimiter: ");
-    Serial.println(delimiter);
-    if (readInt > 999){
-      readInt++;        // hopcount starts at 1000, so if hopcount then increment
+    int readInt = activeSerial.parseInt();    // use parseint so that we read any number of digits
+    char delimiter = activeSerial.read();     // catch character following int value
+    Serial.printf("loop: read input: %d%c\n", readInt, delimiter);
+
+    if (readInt > 999){                 // hopcount starts at 1000, so if hopcount then increment
+      readInt++;        
     }
 
+    // echo the input back out to the next floodlight
     if (mySerial){
-      mySerial.printf("mySerial sent: %d%c",readInt,delimiter);
+      mySerial.printf("%d%c",readInt,delimiter);
       Serial.printf("mySerial sent: %d%c\n",readInt,delimiter);    
     } else {
-      Serial.print("loop: port not ready, mySerial = ");
+      Serial.printf("loop: port not ready, mySerial = ");
       Serial.println(mySerial);
     }
     
-    if (delimiter == '\n'){                         // look for newline character
+    if (delimiter == '\n'){               // look for newline character
       // tell rgbMessage the we reached message end
       rgbMessage.endMessage(readInt); 
       messagePart = 0;  
