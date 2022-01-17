@@ -29,8 +29,8 @@ SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX
 /********************************************************************************************
 SELECT ONE OR OTHER SERIAL PORT TO RECEIVE INPUT DATA: SERIAL FOR DEBUGGING; MYSERIAL FOR USE
 *********************************************************************************************/
-//SoftwareSerial &activeSerial = mySerial;  // use for normal operation
-HardwareSerial &activeSerial = Serial;    // use for debug
+SoftwareSerial &activeSerial = mySerial;  // use for normal operation
+//HardwareSerial &activeSerial = Serial;    // use for debug
 
 
 void setup() {
@@ -45,7 +45,7 @@ void setup() {
 
 
 void loop() {
-  // Serial data format: HopCount,Target,R,G,B  (e.g. 1,2,200,200,100)
+  // Serial data format: HopCount,Target,R,G,B  (e.g. 1001,2,200,200,100 )
   // if there's any serial available, read it:
   if (activeSerial.available()) {
     digitalWrite (LED_BUILTIN, LOW);    // LED provides a visual que that data is being processed
