@@ -4,13 +4,17 @@
 
 
 message::message(int red, int green, int blue){
-  // constructor for message
+  // constructor for message with LED pins defined
   redPin = red;
   greenPin = green;
   bluePin = blue;
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
+}
+
+message::message(){
+  // constructor for message with no parameters
 }
 
 void message::buildMessage(int data) {

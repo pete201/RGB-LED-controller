@@ -5,6 +5,7 @@
 
 class message {
   public:
+    message();
     message (int, int, int);
     void resetCounter() {arrayIndex = 0;}
     void buildMessage(int);

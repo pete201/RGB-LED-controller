@@ -19,7 +19,7 @@
 const int serialRxPin = 4;  // (D2) blue wire
 const int serialTxPin = 5;  // (D1) white wire
 
-int hopCount = 1;
+int hopCount = 1000;
 int target;
 int red;
 int green;
