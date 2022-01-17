@@ -19,11 +19,13 @@
 const int serialRxPin = 4;  // (D2) blue wire
 const int serialTxPin = 5;  // (D1) white wire
 
-int hopCount = 1;
+int hopCount = 1001;
 int target;
 int red;
 int green;
 int blue;
+
+int lastMillis = 0;
 
 SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
 
@@ -34,7 +36,7 @@ void setup() {
   mySerial.begin(57600);
 
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite (LED_BUILTIN, HIGH);
+  digitalWrite (LED_BUILTIN, LOW);
 }
 
 void loop() {
@@ -50,17 +52,23 @@ void loop() {
 
     Serial.print(Serial.available());
     // look for the newline:
-    //if (Serial.read() == '\n'){
-      // send data to next target, adding hopCount = 1
-    mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
-//      // send data back to PC 
-    Serial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
-    // } else {
-    //   Serial.println("data error");
-    // }
-    digitalWrite (LED_BUILTIN, HIGH);
-  }
+    if (Serial.read() == '\n'){
+      // send data to next target, adding hopCount
+      if (mySerial){
+        mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+        // echo data back to PC 
+        Serial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+      } else {
+        Serial.println("loop: mySerial not available");
+      }
+      digitalWrite (LED_BUILTIN, HIGH);
+    }
 
+    // see if we are alive
+    if (millis() - lastMillis > 1000){
+      Serial.print("alive");
+    }
+  }
   // when message circles round floodlights and gets back to supervisor, echo back to PC
   // while (mySerial.available() > 0) {
 
@@ -77,5 +85,5 @@ void loop() {
   //   } else {
   //     Serial.println("No round robin");
   //   }
-  // }
+  //}
 }
