@@ -14,6 +14,7 @@
  * Main reason for this is that i can't physically fit a USB connector into my floodlights!
  */
 
+#include <Arduino.h>
 #include <SoftwareSerial.h>
 // pins for software serial interface
 const int serialRxPin = 4;  // (D2) blue wire
@@ -30,45 +31,52 @@ int lastMillis = 0;
 SoftwareSerial mySerial(serialRxPin, serialTxPin); // RX, TX  
 
 void setup() {
-  Serial.begin(115200);
+  lastMillis = millis();
+  pinMode(LED_BUILTIN, OUTPUT);
   
+  Serial.begin(115200);
+  while (!Serial){
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+  digitalWrite(LED_BUILTIN, HIGH);
+  
+  Serial.println("setup:");
   // Software serial is used for I/O
   mySerial.begin(57600);
 
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite (LED_BUILTIN, LOW);
 }
 
 void loop() {
   //read data from PC
-  while (Serial.available() > 0) {
-    digitalWrite (LED_BUILTIN, LOW);
-    Serial.print("receiving data...");
-
-    target = Serial.parseInt();
-    red = Serial.parseInt();
-    green = Serial.parseInt();
-    blue = Serial.parseInt();
-
-    Serial.print(Serial.available());
-    // look for the newline:
-    if (Serial.read() == '\n'){
-      // send data to next target, adding hopCount
-      if (mySerial){
-        mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
-        // echo data back to PC 
-        Serial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
-      } else {
+   while (Serial.available() > 0) {
+     digitalWrite (LED_BUILTIN, LOW);
+     Serial.println("receiving data...");
+  
+     target = Serial.parseInt();
+     red = Serial.parseInt();
+     green = Serial.parseInt();
+     blue = Serial.parseInt();
+  
+     // look for the newline:
+     if (Serial.read() == '\n'){
+       // send data to next target, adding hopCount
+       if (mySerial){
+         mySerial.printf("H%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+         // echo data back to PC 
+         Serial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+       } else {
         Serial.println("loop: mySerial not available");
-      }
-      digitalWrite (LED_BUILTIN, HIGH);
-    }
-
-    // see if we are alive
-    if (millis() - lastMillis > 1000){
-      Serial.print("alive");
-    }
+       }
+     digitalWrite (LED_BUILTIN, HIGH);
+     }
+   }
+  // see if we are alive
+  if ((millis() - lastMillis) > 1000){
+    lastMillis = millis();
+    Serial.println("alive");
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   }
+  
   // when message circles round floodlights and gets back to supervisor, echo back to PC
   // while (mySerial.available() > 0) {
 
