@@ -42,7 +42,7 @@ void setup() {
   
   Serial.println("setup:");
   // Software serial is used for I/O
-  mySerial.begin(57600);
+  mySerial.begin(9600);
 
 }
 

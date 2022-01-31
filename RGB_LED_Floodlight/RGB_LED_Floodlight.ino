@@ -35,7 +35,7 @@ SoftwareSerial &activeSerial = mySerial;  // use for normal operation
 
 void setup() {
   Serial.begin(115200);               // hardware Serial is used for firmware updates and debugging
-  mySerial.begin(57600);              // Software serial is used for I/O (use lower speed since cables could be a few feet long)
+  mySerial.begin(9600);              // Software serial is used for I/O (use lower speed since cables could be a few feet long)
 
   pinMode(LED_BUILTIN, OUTPUT);       // LED provides a visual que that data is being processed
   digitalWrite (LED_BUILTIN, HIGH);
