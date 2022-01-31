@@ -15,7 +15,7 @@ message::message(int red, int green, int blue){
 
 void message::buildMessage(int data) {
   // on incoming serial, add next data item to array and increase counter (arrayIndex)
-  Serial.printf("buildMessage: adding data %d to array position %d\n", data, arrayIndex);
+  //Serial.printf("buildMessage: adding data %d to array position %d\n", data, arrayIndex);
   messageArray[arrayIndex] = data;
   arrayIndex++;
 }

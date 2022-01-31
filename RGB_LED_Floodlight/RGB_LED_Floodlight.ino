@@ -52,7 +52,7 @@ void loop() {
 
     int readInt = activeSerial.parseInt();    // use parseint so that we read any number of digits
     char delimiter = activeSerial.read();     // catch character following int value
-    Serial.printf("loop: read input: %d%c\n", readInt, delimiter);
+    //Serial.printf("loop: read input: %d%c\n", readInt, delimiter);
 
     if (readInt > 999){                 // hopcount starts at 1000, so if hopcount then increment
       readInt++;        
@@ -61,7 +61,7 @@ void loop() {
     // echo the input back out to the next floodlight
     if (mySerial){
       mySerial.printf("%d%c",readInt,delimiter);
-      Serial.printf("mySerial sent: %d%c\n",readInt,delimiter);    
+      //Serial.printf("mySerial sent: %d%c\n",readInt,delimiter);    
     } else {
       Serial.printf("loop: port not ready, mySerial = ");
       Serial.println(mySerial);
