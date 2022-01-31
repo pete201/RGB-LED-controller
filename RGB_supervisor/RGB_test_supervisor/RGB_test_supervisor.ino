@@ -70,22 +70,23 @@ void loop()
       Serial.println("loop: mySerial not available");
     }
   }
+
+
+  //when message circles round floodlights and gets back to supervisor, echo back to PC
+  while (mySerial.available() > 0) {
+
+    // look for valid integers in the incoming serial stream; identified as 'round robin' ints
+    int rrhopCount  = mySerial.parseInt();
+    int rrtarget = mySerial.parseInt();
+    int rrred = mySerial.parseInt();
+    int rrgreen = mySerial.parseInt();
+    int rrblue = mySerial.parseInt();
+
+    // look for the newline and send back to PC
+    if (mySerial.read() == '\n'){
+      Serial.printf("%d,%d,%d,%d,%d\n", rrhopCount, rrtarget, rrred, rrgreen, rrblue);
+    } else {
+      Serial.println("No round robin");
+    }
+  }
 }
-
-  // when message circles round floodlights and gets back to supervisor, echo back to PC
-  // while (mySerial.available() > 0) {
-
-  //   // look for valid integers in the incoming serial stream; identified as 'round robin' ints
-  //   int rrhopCount  = mySerial.parseInt();
-  //   int rrtarget = mySerial.parseInt();
-  //   int rrred = mySerial.parseInt();
-  //   int rrgreen = mySerial.parseInt();
-  //   int rrblue = mySerial.parseInt();
-
-  //   // look for the newline and send back to PC
-  //   if (mySerial.read() == '\n'){
-  //     Serial.printf("H%d,%d,%d,%d,%d\n", rrhopCount, rrtarget, rrred, rrgreen, rrblue);
-  //   } else {
-  //     Serial.println("No round robin");
-  //   }
-  //}
