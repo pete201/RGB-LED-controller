@@ -37,17 +37,20 @@ elif command == 'random':
     green = randint(0,255)
     blue = randint(0,255)    
 
-    ser.write(f"{light},{red},{green},{blue}\n".encode())
-    
-    print("Output values: ",red,green,blue)
+    try:
+        ser.write(f"{light},{red},{green},{blue}\n".encode())
+        print("Output values: ",red,green,blue)
+    except:
+        print('failed to write serial data to LEDs')
 
-    sleep(0.5) # necessary to wait for arduino to respond
 
-    if ser.in_waiting > 0:
+    try:
+        # ser is set with a 0.1s timeout so this won't wait forever in case of a serial read error
         data = str(ser.readline())
         print("data received: ", data)
-    else:
+    except:
         print("No serial data")
+
 
 
 elif command == 'scene':

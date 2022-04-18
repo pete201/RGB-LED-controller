@@ -1,4 +1,8 @@
 /* NOTE - UPLOAD FROM ARDUINO, NOT VSC.  included in VSC for reference only
+- from VSC, it uploads the floodlight.ino instead of supervisor.ino !!!!!!
+NOTE - if get 'timeout waiting for packet header', temp connect D3 to GND until PC connects to 8266.
+NOTE - supervisor seems to need a hard reset after programming too
+
  *  
  * This sketch is RGB Floodlight Supervisor
  * all it does is:
@@ -63,7 +67,7 @@ void loop() {
        if (mySerial){
          mySerial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
          // echo data back to PC 
-         Serial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
+         //Serial.printf("%d,%d,%d,%d,%d\n", hopCount, target, red, green, blue);
        } else {
         Serial.println("loop: mySerial not available");
        }
