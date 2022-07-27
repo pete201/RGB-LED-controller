@@ -2,13 +2,29 @@
 <html lang="en">
 <head>
     <script src="./script.js"></script>
+    <link rel="stylesheet" href="./style.css">
     <title>Lighting Controller</title>
 </head>
 <body>
     <button id="connect">Connect</button><br><br>
-    <button onclick="rgb(0,0,0,0)">Black Out</button><br>
-    <button onclick="rgb(0,255,0,0)">Red</button>
-    <button onclick="rgb(0,0,255,0)">Green</button>
-    <button onclick="rgb(0,0,0,255)">Blue</button>
+    <div id="scenes">
+        <button onclick="rgb(0,0,0,0)">Black</button>
+        <button onclick="rgb(0,255,255,255)">White</button>
+        <button onclick="rgb(0,255,0,0)">Red</button>
+        <button onclick="rgb(0,0,255,0)">Green</button>
+        <button onclick="rgb(0,0,0,255)">Blue</button>
+        <button onclick="rgb(0,0,255,255)">Cyan</button>
+        <button onclick="rgb(0,255,255,0)">Yellow</button>
+        <button onclick="rgb(0,255,0,255)">Magenta</button>
+
+        <button onclick="fade(0,0,0,0,1)">Fade Black</button>
+        <button onclick="fade(0,255,255,255,1)">Fade White</button>
+        <button onclick="fade(0,255,0,0,1)">Fade Red</button>
+        <button onclick="fade(0,0,255,0,1)">Fade Green</button>
+        <button onclick="fade(0,0,0,255,1)">Fade Blue</button>
+        <button onclick="fade(0,0,255,255,1)">Fade Cyan</button>
+        <button onclick="fade(0,255,255,0,1)">Fade Yellow</button>
+        <button onclick="fade(0,255,0,255,1)">Fade Magenta</button>
+    </div>
 </body>
 </html>
