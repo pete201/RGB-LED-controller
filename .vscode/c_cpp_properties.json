@@ -20,40 +20,39 @@
         },
         {
             "name": "Arduino",
-            "compilerPath": "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\bin\\xtensa-lx106-elf-g++",
+            "compilerPath": "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\bin\\xtensa-lx106-elf-g++",
             "compilerArgs": [
                 "-U__STRICT_ANSI__",
-                "-w",
                 "-mlongcalls",
                 "-mtext-section-literals",
                 "-fno-rtti",
                 "-falign-functions=4",
-                "-std=gnu++11"
+                "-std=c++11"
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\tools\\sdk\\include",
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\tools\\sdk\\lwip2\\include",
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\tools\\sdk\\libc\\xtensa-lx106-elf\\include",
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\cores\\esp8266",
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\variants\\d1_mini",
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\libraries\\SoftwareSerial\\src",
-                "c:\\users\\peter.deeming\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\xtensa-lx106-elf\\include\\c++\\4.8.2",
-                "c:\\users\\peter.deeming\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\xtensa-lx106-elf\\include\\c++\\4.8.2\\xtensa-lx106-elf",
-                "c:\\users\\peter.deeming\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\xtensa-lx106-elf\\include\\c++\\4.8.2\\backward",
-                "c:\\users\\peter.deeming\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\lib\\gcc\\xtensa-lx106-elf\\4.8.2\\include",
-                "c:\\users\\peter.deeming\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\lib\\gcc\\xtensa-lx106-elf\\4.8.2\\include-fixed",
-                "c:\\users\\peter.deeming\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-4-b40a506\\xtensa-lx106-elf\\include"
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\tools\\sdk\\include",
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\tools\\sdk\\lwip2\\include",
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\tools\\sdk\\libc\\xtensa-lx106-elf\\include",
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\cores\\esp8266",
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\variants\\d1_mini",
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\libraries\\SoftwareSerial\\src",
+                "c:\\users\\archi\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\xtensa-lx106-elf\\include\\c++\\4.8.2",
+                "c:\\users\\archi\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\xtensa-lx106-elf\\include\\c++\\4.8.2\\xtensa-lx106-elf",
+                "c:\\users\\archi\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\xtensa-lx106-elf\\include\\c++\\4.8.2\\backward",
+                "c:\\users\\archi\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\lib\\gcc\\xtensa-lx106-elf\\4.8.2\\include",
+                "c:\\users\\archi\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\lib\\gcc\\xtensa-lx106-elf\\4.8.2\\include-fixed",
+                "c:\\users\\archi\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\2.5.0-3-20ed2b9\\xtensa-lx106-elf\\include"
             ],
             "forcedInclude": [
-                "C:\\Users\\peter.deeming\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.4\\cores\\esp8266\\Arduino.h"
+                "C:\\Users\\archi\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\cores\\esp8266\\Arduino.h"
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
             "defines": [
                 "__ets__",
                 "ICACHE_FLASH",
-                "NONOSDK22x_190703=1",
+                "NONOSDK221=1",
                 "F_CPU=80000000L",
                 "LWIP_OPEN_SRC",
                 "TCP_MSS=536",
