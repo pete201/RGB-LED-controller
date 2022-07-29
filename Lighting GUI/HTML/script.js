@@ -1,17 +1,17 @@
 window.onload=function(){
     if ("serial" in navigator) {
-        console.log(true);
         connectButton = document.getElementById('connect');
         connectButton.addEventListener('click', async () => {
             // Prompt user to select any serial port.
             port = await navigator.serial.requestPort();
-            console.log(port);
             await port.open({ baudRate: 115200 });
 
             encoder = new TextEncoder();
             writer = port.writable.getWriter();
             // writer.write(encoder.encode("0,0,0,0\n"));
             connectButton.remove();
+            interval = undefined;
+            fadeTime = 1;
             rgb(0,0,0,0);
             // writer.releaseLock();
         });
@@ -26,14 +26,46 @@ function rgb(light,red,green,blue){
 }
 
 function fade(light,red,green,blue,fadeLength){
-    differenceRed = (redVal-red)/(fadeLength*10)
-    differenceGreen = (greenVal-green)/(fadeLength*10)
-    differenceBlue = (blueVal-blue)/(fadeLength*10)
-    interval = setInterval(function(){
-        redVal -= Math.round(differenceRed)
-        greenVal -= Math.round(differenceGreen)
-        blueVal -= Math.round(differenceBlue)
-        rgb(light,redVal,greenVal,blueVal);
-    },100);
-    setTimeout(function(){clearInterval(interval);rgb(light,red,green,blue)},fadeLength*1000);
+    console.log(fadeLength)
+    if(fadeLength!=undefined){
+        differenceRed = (redVal-red)/(fadeLength*10)
+        differenceGreen = (greenVal-green)/(fadeLength*10)
+        differenceBlue = (blueVal-blue)/(fadeLength*10)
+        interval = setInterval(function(){
+            redVal -= Math.round(differenceRed)
+            greenVal -= Math.round(differenceGreen)
+            blueVal -= Math.round(differenceBlue)
+            rgb(light,redVal,greenVal,blueVal);
+        },100);
+        setTimeout(function(){if(interval!=undefined){clearInterval(interval);rgb(light,red,green,blue)}},fadeLength*1000);
+    } else {
+        differenceRed = (redVal-red)/(fadeTime*10)
+        differenceGreen = (greenVal-green)/(fadeTime*10)
+        differenceBlue = (blueVal-blue)/(fadeTime*10)
+        interval = setInterval(function(){
+            redVal -= Math.round(differenceRed)
+            greenVal -= Math.round(differenceGreen)
+            blueVal -= Math.round(differenceBlue)
+            rgb(light,redVal,greenVal,blueVal);
+        },100);
+        setTimeout(function(){if(interval!=undefined){clearInterval(interval);rgb(light,red,green,blue)}},fadeTime*1000);
+    }
+};
+
+function motorbike(light,delay){
+    if(light==0){
+        interval = setInterval(function(){
+            rgb(1,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+            rgb(2,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+        },delay*1000);
+    } else {
+        interval = setInterval(function(){
+            rgb(light,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+        },delay*1000);
+    }
+};
+
+function stop(){
+    clearInterval(interval);
+    interval = undefined;
 };

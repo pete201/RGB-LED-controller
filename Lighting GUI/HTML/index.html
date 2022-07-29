@@ -7,24 +7,42 @@
 </head>
 <body>
     <button id="connect">Connect</button><br><br>
+    <p>
+        <label for="fadeLength">Fade Time:</label>
+        <input type="number" id="fadeLength" value="1" onchange="fadeTime=this.value" step="0.1">
+    </p>
     <div id="scenes">
-        <button onclick="rgb(0,0,0,0)">Black</button>
-        <button onclick="rgb(0,255,255,255)">White</button>
-        <button onclick="rgb(0,255,0,0)">Red</button>
-        <button onclick="rgb(0,0,255,0)">Green</button>
-        <button onclick="rgb(0,0,0,255)">Blue</button>
-        <button onclick="rgb(0,0,255,255)">Cyan</button>
-        <button onclick="rgb(0,255,255,0)">Yellow</button>
-        <button onclick="rgb(0,255,0,255)">Magenta</button>
+        <button onclick="stop();rgb(0,0,0,0);">Black</button>
+        <button onclick="stop();rgb(0,255,255,255);">White</button>
+        <button onclick="stop();rgb(0,255,0,0);">Red</button>
+        <button onclick="stop();rgb(0,0,255,0);">Green</button>
+        <button onclick="stop();rgb(0,0,0,255);">Blue</button>
+        <button onclick="stop();rgb(0,0,255,255);">Cyan</button>
+        <button onclick="stop();rgb(0,255,255,0);">Yellow</button>
+        <button onclick="stop();rgb(0,255,0,255);">Magenta</button>
 
-        <button onclick="fade(0,0,0,0,1)">Fade Black</button>
-        <button onclick="fade(0,255,255,255,1)">Fade White</button>
-        <button onclick="fade(0,255,0,0,1)">Fade Red</button>
-        <button onclick="fade(0,0,255,0,1)">Fade Green</button>
-        <button onclick="fade(0,0,0,255,1)">Fade Blue</button>
-        <button onclick="fade(0,0,255,255,1)">Fade Cyan</button>
-        <button onclick="fade(0,255,255,0,1)">Fade Yellow</button>
-        <button onclick="fade(0,255,0,255,1)">Fade Magenta</button>
+        <button onclick="stop();fade(0,0,0,0,1);">Fade Black</button>
+        <button onclick="stop();fade(0,255,255,255,1);">Fade White</button>
+        <button onclick="stop();fade(0,255,0,0,1);">Fade Red</button>
+        <button onclick="stop();fade(0,0,255,0,1);">Fade Green</button>
+        <button onclick="stop();fade(0,0,0,255,1);">Fade Blue</button>
+        <button onclick="stop();fade(0,0,255,255,1);">Fade Cyan</button>
+        <button onclick="stop();fade(0,255,255,0,1);">Fade Yellow</button>
+        <button onclick="stop();fade(0,255,0,255,1);">Fade Magenta</button>
+
+        <button onclick="stop();fade(0,0,0,0)">Fade Time Black</button>
+        <button onclick="stop();fade(0,255,255,255)">Fade Time White</button>
+        <button onclick="stop();fade(0,255,0,0)">Fade Time Red</button>
+        <button onclick="stop();fade(0,0,255,0)">Fade Time Green</button>
+        <button onclick="stop();fade(0,0,0,255)">Fade Time Blue</button>
+        <button onclick="stop();fade(0,0,255,255)">Fade Time Cyan</button>
+        <button onclick="stop();fade(0,255,255,0)">Fade Time Yellow</button>
+        <button onclick="stop();fade(0,255,0,255)">Fade Time Magenta</button>
+
+        <button onclick="stop();motorbike(0,.5);">Motorbike .5s</button>
+        <button onclick="stop();motorbike(0,.25);">Motorbike .25s</button>
+        <button onclick="stop();motorbike(0,.1);">Motorbike .1s</button>
+        <button onclick="stop();">STOP</button>
     </div>
 </body>
 </html>

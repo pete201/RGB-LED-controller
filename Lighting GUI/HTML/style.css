@@ -2,6 +2,11 @@ html{
     background-color: #111111;
 }
 
+p{
+    color: white;
+    font-family: OCR A;
+}
+
 button{
     /* float: left;
     display: block; */
@@ -13,7 +18,7 @@ button{
     color: #FFFFFF;
     width: 150px;
     height: 60px;
-    border-radius: 5px;
+    border-radius: 15px;
 }
   
 button:hover{
