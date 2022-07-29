@@ -11,7 +11,9 @@ window.onload=function(){
             // writer.write(encoder.encode("0,0,0,0\n"));
             connectButton.remove();
             interval = undefined;
+            timeout = undefined;
             fadeTime = 1;
+            delayTime = 1;
             rgb(0,0,0,0);
             // writer.releaseLock();
         });
@@ -26,7 +28,6 @@ function rgb(light,red,green,blue){
 }
 
 function fade(light,red,green,blue,fadeLength){
-    console.log(fadeLength)
     if(fadeLength!=undefined){
         differenceRed = (redVal-red)/(fadeLength*10)
         differenceGreen = (greenVal-green)/(fadeLength*10)
@@ -53,19 +54,68 @@ function fade(light,red,green,blue,fadeLength){
 };
 
 function motorbike(light,delay){
-    if(light==0){
-        interval = setInterval(function(){
-            rgb(1,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-            rgb(2,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-        },delay*1000);
+    if(delay!=undefined){
+        if(light==0){
+            interval = setInterval(function(){
+                rgb(1,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+                rgb(2,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+            },delay*1000);
+        } else {
+            interval = setInterval(function(){
+                rgb(light,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+            },delay*1000);
+        }
     } else {
-        interval = setInterval(function(){
-            rgb(light,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-        },delay*1000);
-    }
+        if(light==0){
+            interval = setInterval(function(){
+                rgb(1,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+                rgb(2,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+            },delayTime*1000);
+        } else {
+            interval = setInterval(function(){
+                rgb(light,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+            },delayTime*1000);
+        }
+    };
 };
 
 function stop(){
     clearInterval(interval);
+    clearTimeout(timeout);
     interval = undefined;
+    timeout = undefined;
+};
+
+function chase(light,array,delay,fadeLength){
+    if(delay!=undefined){
+        red = array[i][0];
+        green = array[i][1];
+        blue = array[i][2];
+        if(fadeLength==undefined){
+            fade(light,red,green,blue,fadeTime)
+        } else {
+            fade(light,red,green,blue,fadeLength)
+        };
+        timeout = setTimeout(function(){
+            i++
+            if (i<array.length) {
+                chase(light,array,delay,fadeLength);
+            };
+        }, delay*1000)
+    } else {
+        red = array[i][0];
+        green = array[i][1];
+        blue = array[i][2];
+        if(fadeLength==undefined){
+            fade(light,red,green,blue,fadeTime)
+        } else {
+            fade(light,red,green,blue,fadeLength)
+        };
+        timeout = setTimeout(function(){
+            i++
+            if (i<array.length) {
+                chase(light,array,delayTime,fadeLength);
+            };
+        }, delayTime*1000)
+    }
 };
