@@ -47,6 +47,7 @@ function rgb(light,red,green,blue){
 
 function fade(light,red,green,blue,fadeLength){
     if(fadeLength!=undefined){
+        fadeVal = [light,red,green,blue,fadeLength];
         differenceRed = (redVal-red)/(fadeLength*10)
         differenceGreen = (greenVal-green)/(fadeLength*10)
         differenceBlue = (blueVal-blue)/(fadeLength*10)
@@ -74,8 +75,20 @@ function fade(light,red,green,blue,fadeLength){
             }
             rgb(light,redVal,greenVal,blueVal);
         },100);
-        setTimeout(function(){if(interval!=undefined){clearInterval(interval);interval=undefined;;rgb(light,red,green,blue)}},fadeLength*1000);
+        setTimeout(function(){
+            if(interval!=undefined
+                &&fadeVal[0]==light
+                &&fadeVal[1]==red
+                &&fadeVal[2]==green
+                &&fadeVal[3]==blue
+                &&fadeVal[4]==fadeLength){
+                    clearInterval(interval);
+                    interval=undefined;
+                    rgb(light,red,green,blue)
+            }
+        },fadeLength*1000);
     } else {
+        fadeVal = [light,red,green,blue,fadeTime];
         differenceRed = (redVal-red)/(fadeTime*10)
         differenceGreen = (greenVal-green)/(fadeTime*10)
         differenceBlue = (blueVal-blue)/(fadeTime*10)
@@ -103,7 +116,18 @@ function fade(light,red,green,blue,fadeLength){
             }
             rgb(light,redVal,greenVal,blueVal);
         },100);
-        setTimeout(function(){if(interval!=undefined){clearInterval(interval);interval=undefined;rgb(light,red,green,blue)}},fadeTime*1000);
+        setTimeout(function(){
+            if(interval!=undefined
+                &&fadeVal[0]==light
+                &&fadeVal[1]==red
+                &&fadeVal[2]==green
+                &&fadeVal[3]==blue
+                &&fadeVal[4]==fadeTime){
+                    clearInterval(interval);
+                    interval=undefined;
+                    rgb(light,red,green,blue)
+            }
+        },fadeTime*1000);
     }
 };
 
