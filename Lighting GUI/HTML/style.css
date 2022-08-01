@@ -8,24 +8,30 @@ p{
 }
 
 button{
-    /* float: left;
-    display: block; */
     background-color: #333333;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-family: OCR A;
     color: #FFFFFF;
-    width: 150px;
+    min-width: 150px;
     height: 60px;
     border-radius: 15px;
+}
+
+#scenes button{
+    height: 100px;
 }
   
 button:hover{
     background-color: #292929;
-    /* animation: buttonHover .25s forwards; */
+}
+#scenes button:hover{
+    background-color: #292929;
 }
 
 div#scenes{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
     padding: 15px;
 }
