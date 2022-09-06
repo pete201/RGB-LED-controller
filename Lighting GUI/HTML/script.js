@@ -21,7 +21,9 @@ window.onload=function(){
             rgb(0,0,0,0);
             // writer.releaseLock();
         });
-    }
+    } else {
+        document.getElementById('data').innerHTML = "Serial Port Web API unavailable in this browser"
+    };
 };
 
 function rgb(light,red,green,blue){
