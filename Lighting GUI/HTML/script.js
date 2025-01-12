@@ -137,10 +137,7 @@ function motorbike(light,delay){
     if(delay!=undefined){
         if(light==0){
             interval = setInterval(function(){
-                rgb(1,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-                rgb(2,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-                rgb(3,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-                rgb(4,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+                rgb(0,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
             },delay*1000);
         } else {
             interval = setInterval(function(){
@@ -150,10 +147,7 @@ function motorbike(light,delay){
     } else {
         if(light==0){
             interval = setInterval(function(){
-                rgb(1,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-                rgb(2,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-                rgb(3,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
-                rgb(4,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
+                rgb(0,Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255))
             },delayTime*1000);
         } else {
             interval = setInterval(function(){
